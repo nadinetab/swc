@@ -1,6 +1,6 @@
 # swc
 
-See [Project Brief](docs/project_brief.md).
+A rework of [my old project](https://github.com/nadinetab/conjunctPy), reframed as a DE problem. See [Project Brief](docs/project_brief.md).
 
 
 #### Implemented
