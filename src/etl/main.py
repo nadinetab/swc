@@ -9,28 +9,23 @@ from typing import Iterator
 
 
 
-# Load config
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
+def setup_logger() -> logging.Logger:
+    now = datetime.now(timezone.utc).timestamp()
+    logs_file_path = Path(Path.cwd(), "logs", f"{int(now)}.app.log")
+    logs_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    logging.basicConfig(
+        filename=logs_file_path,
+        encoding="utf-8",
+        format="{asctime} : {levelname} : {message}",
+        style="{",
+        level=logging.INFO
+    )
+
+    return logging.getLogger(__name__)
 
 
-# Logging
-now = datetime.now(timezone.utc).timestamp()
-logs_file_path = Path(Path.cwd(), "logs", f"{int(now)}.app.log")
-logs_file_path.parent.mkdir(parents=True, exist_ok=True)
-
-logging.basicConfig(
-    filename=logs_file_path,
-    encoding="utf-8",
-    format="{asctime} : {levelname} : {message}",
-    style="{",
-    level=logging.INFO
-)
-
-logger = logging.getLogger(__name__)
-
-
-def store_raw(data: np.ndarray, config: dict, start_dt: datetime) -> None:
+def store_raw(data: np.ndarray, config: dict, start_dt: datetime, logger: logging.Logger) -> None:
     """ Store incoming Numpy array as binary .npz file, binned by spacecraft/instrument/year/month/day.
     """
 
@@ -47,7 +42,7 @@ def store_raw(data: np.ndarray, config: dict, start_dt: datetime) -> None:
     logging.info(f"Wrote data to file: {file_path}")
 
 
-def store_meta(data: dict, config: dict, start_dt: datetime) -> None:
+def store_meta(data: dict, config: dict, start_dt: datetime, logger: logging.Logger) -> None:
     """ Store corresponding metadata as json files, binned by spacecraft/instrument/year/month/day.
     """
 
@@ -67,6 +62,7 @@ def store_meta(data: dict, config: dict, start_dt: datetime) -> None:
 def time_chunks(start: str, stop: str) -> Iterator[tuple[datetime, datetime]]:
     """ Parse a given time window (incoming ISO-8601 string format) into 1d chunks.
     """
+
     start_dt = datetime.fromisoformat(start)
     stop_dt = datetime.fromisoformat(stop)
 
@@ -78,7 +74,7 @@ def time_chunks(start: str, stop: str) -> Iterator[tuple[datetime, datetime]]:
         cur_dt = plus_one
 
 
-def extract_and_load() -> None:
+def extract_and_load(config: dict, logger: logging.Logger) -> None:
 
     for p in config["data_products"]:
         extraction_config = p["extraction"]
@@ -90,9 +86,15 @@ def extract_and_load() -> None:
 
             data, meta = hapi(extraction_config["server"], p["id"], extraction_config["parameters"], datetime.isoformat(start), datetime.isoformat(stop))
 
-            store_raw(data, p["storage"], start)
-            store_meta(meta, p["storage"], start)
+            store_raw(data, p["storage"], start, logger)
+            store_meta(meta, p["storage"], start, logger)
 
 
 if __name__ == "__main__":
-    extract_and_load()
+
+    with open("config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    logger = setup_logger()
+
+    extract_and_load(config, logger)

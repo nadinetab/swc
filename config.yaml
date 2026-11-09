@@ -13,5 +13,5 @@ data_products:
       # chunk_size: 1d
     
     storage:
-      dir_path: data/raw/rbsp/mageis/a/
-      metadata_path: data/meta/rbsp/mageis/a/
+      dir_path: data/raw/rbsp-a/mageis/l3
+      metadata_path: data/meta/rbsp-a/mageis/l3
