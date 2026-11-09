@@ -1,3 +1,5 @@
 .venv
 data/raw/
+data/meta/
+logs/
 sbx/
