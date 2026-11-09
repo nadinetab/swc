@@ -7,7 +7,7 @@ Sunday, 08 Nov. 2026
 
 I am reviving an old project I had attempted as an undergraduate working with a scientist. From what I can piece together from memory and scraps of notes and scripts, what we wanted to do was read particle flux data from two sources: [NASA's Van Allen Probes (RBSP)](https://svs.gsfc.nasa.gov/3951/) and [NOAA's POES (Polar Operational Environmental Satellites)](https://www.ospo.noaa.gov/operations/poes/) and compare their values at a point in space.
 
-### Scientfic context
+### Scientific context
 The Van Allen probes travel in a near-equatorial orbit across different [L-shells](https://en.wikipedia.org/wiki/L-shell)--thus they are able to capture the environment across the inner and outer radiation belts. POES on the other hand travel in LEO (low-earth orbit), they can measure precipitating particles (1). These high-energy particles are usually trapped along magnetic field lines around the earth (hence the term "radiation belts"), but there exists different phenomena that can cause them to "precipitate" or escape from these radiation belts into Earth's upper atmosphere.
 
 1. [Electron precipitation (Wikipedia)](https://en.wikipedia.org/wiki/Electron_precipitation)
@@ -131,9 +131,9 @@ As of Nov. 07, 2026, I have a time constraint of 48 hours and a resource constra
 1. Figure out the general idea for our scientific goals.
 2. Research available RBSP and POES data products and identify which ones are relevant for our use case.
 3. Determine the shape of the data engineering problem.
-4. Write a project brief that outlines the overarching scientific and engineering goals, its scope, and some semblance of a project implementation plan.
+4. Write a project brief that outlines the overarching scientific and engineering goals, its scope.
 5. Implement a small, local ETL pipeline for RBSP-A MagEIS flux data that establishes a pattern for other ingestions.
-    - Write a technical design document that goes through the implementation, outlines open questions and decisions to make.
+    - Write a technical design document that goes through the implementation, outlines open questions and decisions made.
 
 **Out of scope at this stage:**
 - RBSP-B MagEIS flux and POES flux ingestions
