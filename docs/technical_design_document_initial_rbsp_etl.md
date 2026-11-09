@@ -43,7 +43,7 @@ The response we get from HAPI is bound to a single day \[start date, end date\).
 
 Example: `data/raw/rbsp-a/mageis/l3/2013/06/13.npz`
 
-**Idempotency** 
+**Idempotency**
 On a rerun, any existing files are overwritten. Because these files are named based on their date, a request with the same or overlapping time ranges yields the same file name. It is worth revisiting other approaches.
 
 **Testing**
