@@ -32,7 +32,6 @@ def store_raw(data: np.ndarray, config: dict, start_dt: datetime, logger: loggin
     file_path = Path(config["dir_path"], start_dt.strftime("%Y"), start_dt.strftime("%m"), f"{start_dt.strftime('%d')}.npz")
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # TODO: test saved
     try:
         np.savez_compressed(file=file_path, data=data)
     except Exception:
@@ -53,7 +52,7 @@ def store_meta(data: dict, config: dict, start_dt: datetime, logger: logging.Log
         try:
             json.dump(data, metafile)
         except Exception:
-            logger.error(f"Error writing metadata to file {file_path}")
+            logger.exception(f"Error writing metadata to file {file_path}")
             raise
 
     logging.info(f"Wrote metadata to file: {file_path}")
@@ -66,7 +65,7 @@ def time_chunks(start: str, stop: str) -> Iterator[tuple[datetime, datetime]]:
     start_dt = datetime.fromisoformat(start)
     stop_dt = datetime.fromisoformat(stop)
 
-    # TODO: test
+    # TODO - unit test
     cur_dt = start_dt
     while cur_dt < stop_dt:
         plus_one = cur_dt + timedelta(days=1)
@@ -84,6 +83,7 @@ def extract_and_load(config: dict, logger: logging.Logger) -> None:
         # Batch in 1d chunks
         for start, stop in time_chunks(extraction_config["start"], extraction_config["stop"]):
 
+            # TODO - error handling
             data, meta = hapi(extraction_config["server"], p["id"], extraction_config["parameters"], datetime.isoformat(start), datetime.isoformat(stop))
 
             store_raw(data, p["storage"], start, logger)
@@ -91,7 +91,6 @@ def extract_and_load(config: dict, logger: logging.Logger) -> None:
 
 
 if __name__ == "__main__":
-
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
 
