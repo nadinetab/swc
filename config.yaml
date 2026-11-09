@@ -2,7 +2,7 @@
 data_products:
   - id: RBSPA_REL04_ECT-MAGEIS-L3@0
     description: L3 Pitch-Angle sorted electron flux measurements for RBSP-A
-    
+
     extraction:
       server: https://cdaweb.gsfc.nasa.gov/hapi/
       start: "2013-06-13T00:00:00Z"
@@ -11,7 +11,7 @@ data_products:
 
       # For now, I will make 1d the default.
       # chunk_size: 1d
-    
+
     storage:
       dir_path: data/raw/rbsp-a/mageis/l3
       metadata_path: data/meta/rbsp-a/mageis/l3

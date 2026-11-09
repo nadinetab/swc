@@ -1,12 +1,11 @@
 import numpy as np
 
 
-
 def sample_mageis_raw():
-    """ Mock HAPI response data for MagEIS L3 measurements. Includes time, some n-dim fields, and some 
+    """Mock HAPI response data for MagEIS L3 measurements. Includes time, some n-dim fields, and some
     scalars providing magnetic field context.
     """
-    n, shape = 20, (4, 5)  # Shape corresponds to time, pitch-angle, and energy 
+    n, shape = 20, (4, 5)  # Shape corresponds to time, pitch-angle, and energy
     rand = np.random.default_rng(0)
 
     dtype = [

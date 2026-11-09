@@ -28,7 +28,7 @@ Please note that currently, the exact scientific objectives of the original proj
 ### Engineering
 Despite the remaining ambiguity in our scientific goals, there is a clear data engineering problem emerging here: these satellite flux data are high-resolution time-series data and in our case, the shape of our data is multi-dimensional. These flux measurements are binned by energy and pitch-angle. Our science objectives require us to massage this data in a format that will enable us to do some analytics. With data this complex and voluminous (3), it would hinder our study to extract, load in memory, and process / transform in batches just using Pandas alone (4), especially as the exploratory nature of this project requires repeated processing.
 
-For now we are working with historical data--these missions ended around 2019-early 2020s so we don't expect to ingest any real-time data from these satellites. Should our findings lead to more questions in the future, we may also have a need to ingest more types of data that might be ongoing (e.g. derived data like [Planetary K-index](https://www.spaceweather.gov/products/planetary-k-index)). 
+For now we are working with historical data--these missions ended around 2019-early 2020s so we don't expect to ingest any real-time data from these satellites. Should our findings lead to more questions in the future, we may also have a need to ingest more types of data that might be ongoing (e.g. derived data like [Planetary K-index](https://www.spaceweather.gov/products/planetary-k-index)).
 
 <small>3. _The Van Allen Probes/RBSP missions ran from 2012-2019. The resolution of the MagEIS electron flux data is about 11s. This corresponds to roughly 20.4M data points across its lifetime for just one of the probes (of which there are two). For POES, we have even higher (2s) resolution data. That would be equivalent to 43k data points per day, or >110M across 7 years._</small>
 
@@ -40,7 +40,7 @@ For now we are working with historical data--these missions ended around 2019-ea
 I want to approach this problem from a realistic perspective: I am one scientist who has a question to answer, a paper to write. This question and its answer can lead to more questions, and more reasons to want to revisit and play with the data I'm looking at. I am also limited in time and resources, that is--limited in funding, in personnel--and I only have my personal laptop to use for this.
 
 This data platform should allow me to:
-- query and retrieve flux measurements across different energy bins and pitch-angles 
+- query and retrieve flux measurements across different energy bins and pitch-angles
 - query for values within a specified time window or from a specific spacecraft
 - do analysis
 - retrieve metadata associated with the measurements
@@ -118,7 +118,7 @@ Data Products | Satellite | Reference | Description |
 These satellites have all been decommissioned so we are only dealing with historical data.
 
 For more context:
-- "MagEIS" (Magnetic Electron Ion Spectrometer) is the name of the instrument in the RBSP probes that measure flux for electrons and ions within a certain energy range (medium-to-high energies). It is one of the three instruments in the "RBSP-ECT" suite (Energetic Particle, Composition, and Thermal Plasma Suite). 
+- "MagEIS" (Magnetic Electron Ion Spectrometer) is the name of the instrument in the RBSP probes that measure flux for electrons and ions within a certain energy range (medium-to-high energies). It is one of the three instruments in the "RBSP-ECT" suite (Energetic Particle, Composition, and Thermal Plasma Suite).
 - "SEM-2" (Space Environment Monitor-2) is a similar spectrometer that measures electron and ion fluxes onboard POES, which is near the Earth's upper atmosphere.
 
 
