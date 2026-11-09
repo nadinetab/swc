@@ -26,7 +26,7 @@ Please note that currently, the exact scientific objectives of the original proj
 
 
 ### Engineering
-Despite the remaining ambiguity in our scientific goals, there is a clear data engineering problem emerging here: these satellite flux data are high-resolution time-series data and in our case, the shape of our data is multi-dimensional. These flux measurements are binned by energy and pitch-angle. Our science objectives require us to massage this data in a format that will enable us to do some analytics. With data this complex and voluminous (3), it would hinder our study to extract, load in memory, and process / transform in batches just using Pandas alone (4).
+Despite the remaining ambiguity in our scientific goals, there is a clear data engineering problem emerging here: these satellite flux data are high-resolution time-series data and in our case, the shape of our data is multi-dimensional. These flux measurements are binned by energy and pitch-angle. Our science objectives require us to massage this data in a format that will enable us to do some analytics. With data this complex and voluminous (3), it would hinder our study to extract, load in memory, and process / transform in batches just using Pandas alone (4), especially as the exploratory nature of this project requires repeated processing.
 
 For now we are working with historical data--these missions ended around 2019-early 2020s so we don't expect to ingest any real-time data from these satellites. Should our findings lead to more questions in the future, we may also have a need to ingest more types of data that might be ongoing (e.g. derived data like [Planetary K-index](https://www.spaceweather.gov/products/planetary-k-index)). 
 
@@ -58,6 +58,53 @@ It follows that:
 - The data model should make sense for our current use case. Ideally, it should be reasonable for other investigations as well.
 - The process should be idempotent: running it multiple times should not create duplicate data.
 
+#### Rough Outline
+```mermaid
+flowchart LR
+    subgraph SRC["Sources (historical)"]
+        A["RBSPA_REL04_ECT-MAGEIS-L3"]
+        B["RBSPB_REL04_ECT-MAGEIS-L3"]
+        C["METOP2_POES-SEM2_FLUXES-2SEC"]
+    end
+
+    subgraph ING["Ingestion (Python, HAPI client, idempotent)"]
+        E["Extract via HAPI"] --> F["Write to raw layer"]
+    end
+
+    subgraph RAW["Raw layer (persistent files)"]
+        G[/"Flux data<br/>.npz"/]
+        H[/"Metadata<br/>.json"/]
+    end
+
+    subgraph INT["Intermediate layer"]
+        I["Flatten to tabular (Python)<br/>time, energy, pitch-angle, flux"]
+        Q["Quality filtering<br/>fill values, flags, contamination"]
+        I --> Q
+    end
+
+    subgraph ANA["Analysis layer (TBD)"]
+        J["Analysis-ready datasets"]
+        M["Conjunction matching<br/>RBSP / POES by L-shell and time lag"]
+    end
+
+    K["Researcher<br/>query by time window, spacecraft,<br/>energy, pitch-angle"]
+
+    A --> E
+    B --> E
+    C --> E
+    F --> G
+    F --> H
+    G --> I
+    H --> I
+    Q --> J
+    J -.-> M
+    J --> K
+    M -.-> K
+
+    classDef later stroke-dasharray: 5 5
+    class M later
+```
+
 
 #### Data
 With regard to our investigation, we're looking to ingest specifically the following data products:
@@ -73,6 +120,7 @@ These satellites have all been decommissioned so we are only dealing with histor
 For more context:
 - "MagEIS" (Magnetic Electron Ion Spectrometer) is the name of the instrument in the RBSP probes that measure flux for electrons and ions within a certain energy range (medium-to-high energies). It is one of the three instruments in the "RBSP-ECT" suite (Energetic Particle, Composition, and Thermal Plasma Suite). 
 - "SEM-2" (Space Environment Monitor-2) is a similar spectrometer that measures electron and ion fluxes onboard POES, which is near the Earth's upper atmosphere.
+
 
 ### Short-term goals / Current scope
 
@@ -90,6 +138,35 @@ As of Nov. 07, 2026, I have a time constraint of 48 hours and a resource constra
 **Out of scope at this stage:**
 - RBSP-B MagEIS flux and POES flux ingestions
 - Implementation of the data pipeline beyond the raw layer (i.e., no downstream transformations, other scientific analysis, intermediate data models)
+
+#### Diagram
+
+```mermaid
+flowchart LR
+    subgraph SRC["Source"]
+        A["RBSPA_REL04_ECT-MAGEIS-L3"]
+    end
+
+    subgraph ING["Ingestion (Python, HAPI client)"]
+        E["Extract via HAPI"] --> F["Idempotent write"]
+    end
+
+    subgraph RAW["Raw layer (persistent files)"]
+        G[/"Flux data<br/>.npz"/]
+        H[/"Metadata<br/>.json"/]
+    end
+
+    N["Intermediate layer<br/>(out of scope)"]
+
+    A --> E
+    F --> G
+    F --> H
+    G -.-> N
+    H -.-> N
+
+    classDef later stroke-dasharray: 5 5
+    class N later
+```
 
 #### Data
 For this goal, we are only looking at one data product:
