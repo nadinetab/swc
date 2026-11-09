@@ -8,4 +8,4 @@
 
     Ref: https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#npy-format
 
-3. **Paramater selection** In going through my old code, I found that I only retrieved certain MagEIS parameters ('FEDU_plasmagram' and a few other magnetic parameters). I considered also limiting the ingestion to those select few, but I am uncertain as to which parameters may actually be useful later on and I am considering the fact that the uses of this data platform isn't limited to one study, so I am opting to ingest all possible parameters.
+3. **Parameter selection** In going through my old code, I found that I only retrieved certain MagEIS parameters ('FEDU_plasmagram' and a few other magnetic parameters). I considered also limiting the ingestion to those select few, but I am uncertain as to which parameters may actually be useful later on and I am considering the fact that the uses of this data platform isn't limited to one study, so I am opting to ingest all possible parameters.
